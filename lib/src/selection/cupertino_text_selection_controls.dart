@@ -299,6 +299,7 @@ class ExtendedCupertinoTextSelectionControls extends TextSelectionControls {
     Offset position,
     List<TextSelectionPoint> endpoints,
     TextSelectionDelegate delegate,
+    ClipboardStatusNotifier clipboardStatusNotifier,
   ) {
     assert(debugCheckHasMediaQuery(context));
     final MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -357,8 +358,32 @@ class ExtendedCupertinoTextSelectionControls extends TextSelectionControls {
       ));
     }
 
+    void addCopyToolbarButtonIfNeeded(
+        String text,
+        bool Function(TextSelectionDelegate) predicate,
+        void Function(TextSelectionDelegate, ClipboardStatusNotifier) onPressed,
+        ) {
+      if (!predicate(delegate)) {
+        return;
+      }
+
+      if (items.isNotEmpty) {
+        items.add(onePhysicalPixelVerticalDivider);
+      }
+
+      items.add(CupertinoButton(
+        child: Text(text, style: _kToolbarButtonFontStyle),
+        color: _kToolbarBackgroundColor,
+        minSize: _kToolbarHeight,
+        padding: _kToolbarButtonPadding.add(arrowPadding),
+        borderRadius: null,
+        pressedOpacity: 0.7,
+        onPressed: () => onPressed(delegate, clipboardStatusNotifier),
+      ));
+    }
+
     addToolbarButtonIfNeeded(localizations.cutButtonLabel, canCut, handleCut);
-    addToolbarButtonIfNeeded(localizations.copyButtonLabel, canCopy, handleCopy);
+    addCopyToolbarButtonIfNeeded(localizations.copyButtonLabel, canCopy, handleCopy);
     addToolbarButtonIfNeeded(localizations.pasteButtonLabel, canPaste, handlePaste);
     addToolbarButtonIfNeeded(localizations.selectAllButtonLabel, canSelectAll, handleSelectAll);
 

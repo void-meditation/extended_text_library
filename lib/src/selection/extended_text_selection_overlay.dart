@@ -40,6 +40,7 @@ class ExtendedTextSelectionOverlay {
     this.selectionDelegate,
     this.dragStartBehavior = DragStartBehavior.start,
     this.onSelectionHandleTapped,
+    this.clipboardStatusNotifier,
   })  : assert(value != null),
         assert(context != null),
         assert(handlesVisible != null),
@@ -111,6 +112,8 @@ class ExtendedTextSelectionOverlay {
   /// gesture won't.
   /// {@endtemplate}
   final VoidCallback onSelectionHandleTapped;
+
+  final ClipboardStatusNotifier clipboardStatusNotifier;
 
   /// Controls the fade-in and fade-out animations for the toolbar and handles.
   static const Duration fadeDuration = Duration(milliseconds: 150);
@@ -343,6 +346,7 @@ class ExtendedTextSelectionOverlay {
           midpoint,
           endpoints,
           selectionDelegate,
+          clipboardStatusNotifier,
         ),
       ),
     );
